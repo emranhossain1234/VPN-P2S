@@ -1,0 +1,77 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkGateways_hub_vpn_name": {
+      "defaultValue": "hub-vpn",
+      "type": "String"
+    },
+    "publicIPAddresses_hub_pip_externalid": {
+      "defaultValue": "/subscriptions/6690b014-bdbd-4496-98ee-f2f255699f70/resourceGroups/tommy-hub-rg/providers/Microsoft.Network/publicIPAddresses/hub-pip",
+      "type": "String"
+    },
+    "virtualNetworks_hub_vnet_externalid": {
+      "defaultValue": "/subscriptions/6690b014-bdbd-4496-98ee-f2f255699f70/resourceGroups/tommy-hub-rg/providers/Microsoft.Network/virtualNetworks/hub-vnet",
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "apiVersion": "2019-11-01",
+      "name": "[parameters('virtualNetworkGateways_hub_vpn_name')]",
+      "location": "westeurope",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "default",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[parameters('publicIPAddresses_hub_pip_externalid')]"
+              },
+              "subnet": {
+                "id": "[concat(parameters('virtualNetworks_hub_vnet_externalid'), '/subnets/GatewaySubnet')]"
+              }
+            }
+          }
+        ],
+        "sku": {
+          "name": "VpnGw1",
+          "tier": "VpnGw1"
+        },
+        "gatewayType": "Vpn",
+        "vpnType": "RouteBased",
+        "enableBgp": false,
+        "activeActive": false,
+        "vpnClientConfiguration": {
+          "vpnClientAddressPool": {
+            "addressPrefixes": [
+              "172.168.0.0/16"
+            ]
+          },
+          "vpnClientProtocols": [
+            "OpenVPN"
+          ],
+          "vpnClientRootCertificates": [
+            {
+              "name": "root-certificate",
+              "properties": {
+                "publicCertData": "MIIC5zCCAc+gAwIBAgIQeuDifqLvIZxIHp2FbWcB0jANBgkqhkiG9w0BAQsFADAW MRQwEgYDVQQDDAtQMlNSb290Q2VydDAeFw0yMDAzMTcwNzA2NTFaFw0yMTAzMTcw NzI2NTFaMBYxFDASBgNVBAMMC1AyU1Jvb3RDZXJ0MIIBIjANBgkqhkiG9w0BAQEF AAOCAQ8AMIIBCgKCAQEAtdko4/Y4PRvsVbqkp6SY3ZbOMnlU87o6agZoaStslKX8 KAXHjfYf8ryxI5fUyMCz8efV+HwxTq1Op1vvshodd8O2tAlyL0j3kePLnQI0TtY9 Q8TD+77xwDilkjmhYJlbzqIhAV/Pz69FPth1CrHmhD+pGt7V/GY9b6Sysdb2S7So 65ToxnWSJhCoebF3sgvdCDkntFFHY9Xf3APvtLYsgA8nXe+bkgjhqEvAbIjc9ibD 3djtRHJ7RQLiU3dwzlgI/J5j5e58VjQ1PWlt3YZaFHmz2bng9R56LXpu+CerxFOJ W7WRC4F/5oxSNT0BqbsqqZ9y1E4xk2Bx7jprmlE3JQIDAQABozEwLzAOBgNVHQ8B Af8EBAMCAgQwHQYDVR0OBBYEFF37GZ5NTh9/lPdgJxEr3Y+oAZlCMA0GCSqGSIb3 DQEBCwUAA4IBAQCFTv3sJeW2prdWCGxJj2JM7gnNJN2Z4ofj3FdXh9XVjywXnK0K pnEpUKII1oJHgcOYneIlQyDqQu6W3czjt2XXsgh6PVxLkw6YZAuVELT/BGuhqmMW KEqwN+RGz1P5T4Az7EuU4qWKMnhohKaA5HHGiZPqq8V61kL+YsK2sOYHVbXbQ0V2 QtohCWqL6Bur/TJgiWOgENmBU8KdBlJausUGNNo1vuQqAW9E8SlENv8/NTEspo4L fd1g4B4IMNC2bwHeW9RglWiUcix9Dqp/RzQ5ei2lrE/gtFIBfTROm1yiFrjszxgN +SH8rY0+8NTByYWL89q/g/BlJc+tbGUpesOE"
+              }
+            }
+          ],
+          "vpnClientRevokedCertificates": [],
+          "vpnClientIpsecPolicies": []
+        },
+        "bgpSettings": {
+          "asn": 65515,
+          "bgpPeeringAddress": "172.21.1.254",
+          "peerWeight": 0
+        },
+        "vpnGatewayGeneration": "Generation1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkGateways_hub_vpn_name": {
+      "value": "p2s"
+    },
+    "publicIPAddresses_hub_pip_externalid": {
+      "value": "p2s-pip"
+    },
+    "virtualNetworks_hub_vnet_externalid": {
+      "value": "p2s-vnet"
+    }
+  }
+}
